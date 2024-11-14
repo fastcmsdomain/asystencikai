@@ -1,46 +1,71 @@
-.image-carousel-wrapper {
-  --carousel-arrow-size: 48px;
-  --carousel-arrow-color: var(--color-heart-red);
-  --carousel-arrow-bg: rgba(255, 255, 255, 0.8);
-  --card-width: calc((100% - (var(--card-gap) * 3)) / 4);
-  --card-gap: 24px;
+.carousel-container {
+  --carousel-gap: var(--spacing-s);
   --card-radius: 8px;
-  --card-bg: var(--color-nocturnal-blue);
-  margin: 40px 0;
-  padding: 0 var(--card-gap);
+  --card-padding: var(--spacing-s);
+  margin: var(--spacing-xl) auto;
+  max-width: var(--page-max-content);
+  padding: 0 var(--spacing-s);
   
-  position: relative;
   width: 100%;
 }
 
-.image-carousel {
-  cursor: grab;
+.carousel-header {
+  align-items: center;
   display: flex;
-  gap: var(--card-gap);
-  user-select: none;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-l);
+}
+
+.carousel-title {
+  color: var(--color-white);
+  font-family: var(--bold-font-family);
+  font-size: var(--heading-font-size-xl);
+  line-height: var(--heading-line-height-xl);
+  margin: 0;
+}
+
+.carousel-view-all {
+  color: var(--color-white);
+  font-family: var(--semibold-font-family);
+  font-size: var(--body-font-size);
+  text-decoration: none;
+  transition: var(--hover-animation);
+}
+
+.carousel-view-all:hover {
+  color: var(--color-heart-red);
+}
+
+.carousel-wrapper {
+  overflow: hidden;
   width: 100%;
 }
 
-.carousel-slide {
-  flex: 0 0 var(--card-width);
-  min-width: var(--card-width);
+.carousel-slides {
+  display: grid;
+  gap: var(--carousel-gap);
+  grid-template-columns: repeat(4, 1fr);
+  width: 100%;
 }
 
 .carousel-card {
-  background: var(--card-bg);
+  aspect-ratio: 3/4;
+  background: var(--color-nocturnal-blue);
   border-radius: var(--card-radius);
-  height: 100%;
   overflow: hidden;
-  transition: transform 0.3s ease;
+  position: relative;
+  transition: transform var(--hover-animation);
 }
 
 .carousel-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(calc(var(--hover-animation-offset) * -1));
 }
 
 .card-image {
-  aspect-ratio: 16/9;
-  overflow: hidden;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
   width: 100%;
 }
 
@@ -51,24 +76,29 @@
 }
 
 .card-content {
-  color: white;
-  padding: 24px;
+  background: linear-gradient(to top, var(--color-nocturnal-blue) 80%, transparent);
+  bottom: 0;
+  color: var(--color-white);
+  left: 0;
+  padding: var(--spacing-l) var(--card-padding) var(--card-padding);
+  position: absolute;
+  right: 0;
 }
 
 .card-title {
-  font-size: 1.25rem;
-  font-weight: 600;
+  font-family: var(--semibold-font-family);
+  font-size: var(--body-font-size-l);
   line-height: 1.4;
-  margin: 0 0 16px;
+  margin: 0 0 var(--spacing-s);
 }
 
 .card-type {
   align-items: center;
   color: var(--color-heart-red);
   display: flex;
-  font-size: 0.875rem;
-  font-weight: 500;
-  gap: 8px;
+  font-family: var(--body-font-family);
+  font-size: var(--body-font-size-s);
+  gap: var(--spacing-xxs);
   text-transform: uppercase;
 }
 
@@ -76,48 +106,33 @@
   background: currentColor;
   border-radius: 50%;
   content: '';
-  height: 8px;
-  width: 8px;
+  height: 6px;
+  width: 6px;
 }
 
-/* Navigation arrows */
-.carousel-arrow {
-  background: var(--carousel-arrow-bg);
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  height: var(--carousel-arrow-size);
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  transition: all 0.3s ease;
-  width: var(--carousel-arrow-size);
-  z-index: 2;
-}
-
-.carousel-arrow.prev {
-  left: -24px;
-}
-
-.carousel-arrow.next {
-  right: -24px;
-}
-
-/* Responsive styles */
 @media (max-width: 1200px) {
-  .image-carousel-wrapper {
-    --card-width: calc((100% - (var(--card-gap) * 2)) / 3);
+  .carousel-slides {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
 @media (max-width: 900px) {
-  .image-carousel-wrapper {
-    --card-width: calc((100% - var(--card-gap)) / 2);
+  .carousel-slides {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .carousel-title {
+    font-size: var(--heading-font-size-l);
+    line-height: var(--heading-line-height-l);
   }
 }
 
 @media (max-width: 600px) {
-  .image-carousel-wrapper {
-    --card-width: 100%;
+  .carousel-slides {
+    grid-template-columns: 1fr;
+  }
+  
+  .carousel-card {
+    aspect-ratio: 16/9;
   }
 } 
