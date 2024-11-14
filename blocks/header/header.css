@@ -74,19 +74,19 @@ header .nav-brand img:not([src=""]) + a::before {
 
 /* Hamburger styling */
 header nav .nav-hamburger {
-  background-color: var(--color-nocturnal-blue);
+  background-color: transparent
   cursor: pointer;
   left: 0;
-  padding: var(--spacing-l);
+  padding: var(--spacing-md);
   position: fixed;
   top: 0;
   transition: all 0.3s ease;
   z-index: 3;
 }
 
-header nav .nav-hamburger:hover {
+/* header nav .nav-hamburger:hover {
   background-color: var(--color-wild-seal);
-}
+} */
 
 header nav .nav-hamburger button {
   align-items: center;
@@ -292,8 +292,8 @@ header nav[aria-expanded='false'] .nav-hamburger {
   header nav .nav-hamburger-icon,
   header nav .nav-hamburger-icon::before,
   header nav .nav-hamburger-icon::after {
-    height: 3px;
-    width: 4rem;
+    height: 6px;
+    width: 3rem;
   }
 
   header nav .nav-hamburger-icon::before {

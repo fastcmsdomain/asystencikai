@@ -5,7 +5,7 @@ const HERO_CONFIG = {
   },
   AUTOPLAY: {
     ENABLED: true,
-    INTERVAL: 5000,
+    INTERVAL: 9000,
   },
   CLASSES: {
     ACTIVE: 'active',

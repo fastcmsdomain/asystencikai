@@ -8,6 +8,11 @@ const CAROUSEL_CONFIG = {
   },
   TOUCH: {
     THRESHOLD: 50,
+  },
+  AUTO_SCROLL: {
+    ENABLED: true,
+    INTERVAL: 3000,
+    PAUSE_ON_HOVER: true,
   }
 };
 
@@ -145,6 +150,38 @@ export default function decorate(block) {
   let currentSlide = 0;
   let visibleSlides = getVisibleSlides();
   
+  let autoScrollInterval;
+  
+  /**
+   * Handles auto-scroll functionality
+   */
+  function startAutoScroll() {
+    if (!CAROUSEL_CONFIG.AUTO_SCROLL.ENABLED) return;
+    
+    // Clear any existing interval
+    if (autoScrollInterval) {
+      clearInterval(autoScrollInterval);
+    }
+    
+    autoScrollInterval = setInterval(() => {
+      if (currentSlide >= slides.length - visibleSlides) {
+        // Reset to first slide when reaching the end
+        goToSlide(0);
+      } else {
+        goToSlide(currentSlide + 1);
+      }
+    }, CAROUSEL_CONFIG.AUTO_SCROLL.INTERVAL);
+  }
+  
+  /**
+   * Pauses auto-scroll
+   */
+  function pauseAutoScroll() {
+    if (autoScrollInterval) {
+      clearInterval(autoScrollInterval);
+    }
+  }
+  
   // Create indicators
   function updateIndicators() {
     indicators.innerHTML = '';
@@ -189,13 +226,17 @@ export default function decorate(block) {
   // Event listeners
   prevArrow.addEventListener('click', () => {
     if (currentSlide > 0) {
+      pauseAutoScroll();
       goToSlide(currentSlide - 1);
+      startAutoScroll();
     }
   });
   
   nextArrow.addEventListener('click', () => {
     if (currentSlide < slides.length - visibleSlides) {
+      pauseAutoScroll();
       goToSlide(currentSlide + 1);
+      startAutoScroll();
     }
   });
   
@@ -205,6 +246,7 @@ export default function decorate(block) {
   
   slidesContainer.addEventListener('touchstart', (e) => {
     touchStartX = e.touches[0].clientX;
+    pauseAutoScroll();
   });
   
   slidesContainer.addEventListener('touchmove', (e) => {
@@ -220,6 +262,7 @@ export default function decorate(block) {
         goToSlide(currentSlide - 1);
       }
     }
+    startAutoScroll();
   });
   
   // Window resize handler
@@ -230,10 +273,12 @@ export default function decorate(block) {
       currentSlide = Math.min(currentSlide, slides.length - visibleSlides);
       updateIndicators();
       updateCarousel();
+      startAutoScroll();
     }
   });
   
   // Initial setup
   updateIndicators();
   updateCarousel();
+  startAutoScroll();
 }

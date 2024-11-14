@@ -71,6 +71,7 @@
     /* Color */
     --color-white: #fff;
     --color-black: #000;
+    --color-gold: #ffd700;
     --color-heart-red: #f91351;
     --color-light-blue: #00aded;
     --color-nocturnal-blue: #212a35;
@@ -357,7 +358,7 @@
     box-shadow: 0 0 0 100vmax var(--color-white);
     clip-path: inset(-1px -100vmax);
     margin-inline: auto;
-    max-width: var(--page-max-width);
+    /* max-width: var(--page-max-width); */
   }
   
   @media (width >= 900px) {
