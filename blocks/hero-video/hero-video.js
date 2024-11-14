@@ -27,6 +27,11 @@ const HEROVIDEO_CONFIG = {
  * @returns {string|null} YouTube video ID or null if invalid
  */
 function getYouTubeVideoId(url) {
+  // Check if the URL is already an embed URL
+  if (url.includes('youtube.com/embed/')) {
+    return url.split('/embed/')[1].split('?')[0];
+  }
+  
   const match = url.match(HEROVIDEO_CONFIG.YOUTUBE.URL_PATTERN);
   return match ? match[1] : null;
 }
@@ -35,9 +40,10 @@ function getYouTubeVideoId(url) {
  * Creates an iframe element for YouTube video
  * @param {string} videoId - YouTube video ID
  * @param {HTMLElement} block - The block element to check for variations
+ * @param {string} sourceUrl - Original video source URL
  * @returns {HTMLIFrameElement} Configured iframe element
  */
-function createYouTubeElement(videoId, block) {
+function createYouTubeElement(videoId, block, sourceUrl) {
   const iframe = document.createElement('iframe');
   iframe.classList.add(HEROVIDEO_CONFIG.CLASSES.PLAYER, HEROVIDEO_CONFIG.CLASSES.YOUTUBE);
   
@@ -63,7 +69,12 @@ function createYouTubeElement(videoId, block) {
     params.append('controls', '0');
   }
 
-  iframe.src = `${HEROVIDEO_CONFIG.YOUTUBE.EMBED_URL}${videoId}?${params.toString()}`;
+  // Use the original embed URL if it's already transformed
+  const videoUrl = sourceUrl.includes('youtube.com/embed/') 
+    ? sourceUrl
+    : `${HEROVIDEO_CONFIG.YOUTUBE.EMBED_URL}${videoId}`;
+
+  iframe.src = `${videoUrl}${videoUrl.includes('?') ? '&' : '?'}${params.toString()}`;
   iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
   iframe.allowFullscreen = true;
 
@@ -126,7 +137,7 @@ export default function decorate(block) {
       
       if (youtubeId) {
         // Handle YouTube video
-        const youtubeIframe = createYouTubeElement(youtubeId, block);
+        const youtubeIframe = createYouTubeElement(youtubeId, block, videoSource.href);
         videoWrapper.appendChild(youtubeIframe);
       } else {
         // Handle MP4 video
