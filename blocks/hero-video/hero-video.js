@@ -3,6 +3,7 @@ const HEROVIDEO_CONFIG = {
     CONTENT: 'herovideo-content',
     PLAYER: 'herovideo-player',
     OVERLAY: 'herovideo-overlay',
+    YOUTUBE: 'herovideo-youtube',
   },
   VARIATIONS: {
     AUTOPLAY: 'autoplay',
@@ -13,8 +14,61 @@ const HEROVIDEO_CONFIG = {
   VIDEO: {
     TYPE: 'video/mp4',
   },
+  YOUTUBE: {
+    URL_PATTERN: /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&]+)/,
+    EMBED_URL: 'https://www.youtube.com/embed/',
+  },
   ERROR_MESSAGE: 'Error loading video content',
 };
+
+/**
+ * Extracts YouTube video ID from URL
+ * @param {string} url - YouTube video URL
+ * @returns {string|null} YouTube video ID or null if invalid
+ */
+function getYouTubeVideoId(url) {
+  const match = url.match(HEROVIDEO_CONFIG.YOUTUBE.URL_PATTERN);
+  return match ? match[1] : null;
+}
+
+/**
+ * Creates an iframe element for YouTube video
+ * @param {string} videoId - YouTube video ID
+ * @param {HTMLElement} block - The block element to check for variations
+ * @returns {HTMLIFrameElement} Configured iframe element
+ */
+function createYouTubeElement(videoId, block) {
+  const iframe = document.createElement('iframe');
+  iframe.classList.add(HEROVIDEO_CONFIG.CLASSES.PLAYER, HEROVIDEO_CONFIG.CLASSES.YOUTUBE);
+  
+  // Build YouTube URL with parameters
+  const params = new URLSearchParams({
+    enablejsapi: '1',
+    rel: '0',
+    modestbranding: '1',
+  });
+
+  // Add parameters based on variations
+  if (block.classList.contains(HEROVIDEO_CONFIG.VARIATIONS.AUTOPLAY)) {
+    params.append('autoplay', '1');
+  }
+  if (block.classList.contains(HEROVIDEO_CONFIG.VARIATIONS.MUTED)) {
+    params.append('mute', '1');
+  }
+  if (block.classList.contains(HEROVIDEO_CONFIG.VARIATIONS.LOOP)) {
+    params.append('loop', '1');
+    params.append('playlist', videoId);
+  }
+  if (!block.classList.contains(HEROVIDEO_CONFIG.VARIATIONS.CONTROLS)) {
+    params.append('controls', '0');
+  }
+
+  iframe.src = `${HEROVIDEO_CONFIG.YOUTUBE.EMBED_URL}${videoId}?${params.toString()}`;
+  iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+  iframe.allowFullscreen = true;
+
+  return iframe;
+}
 
 /**
  * Creates a video element with specified attributes
@@ -65,15 +119,24 @@ export default function decorate(block) {
     const videoWrapper = document.createElement('div');
     videoWrapper.classList.add(HEROVIDEO_CONFIG.CLASSES.CONTENT);
 
-    const video = createVideoElement(block);
-
     // Add video source
     const videoSource = videoRow.querySelector('a');
     if (videoSource) {
-      const source = document.createElement('source');
-      source.src = videoSource.href;
-      source.type = HEROVIDEO_CONFIG.VIDEO.TYPE;
-      video.appendChild(source);
+      const youtubeId = getYouTubeVideoId(videoSource.href);
+      
+      if (youtubeId) {
+        // Handle YouTube video
+        const youtubeIframe = createYouTubeElement(youtubeId, block);
+        videoWrapper.appendChild(youtubeIframe);
+      } else {
+        // Handle MP4 video
+        const video = createVideoElement(block);
+        const source = document.createElement('source');
+        source.src = videoSource.href;
+        source.type = HEROVIDEO_CONFIG.VIDEO.TYPE;
+        video.appendChild(source);
+        videoWrapper.appendChild(video);
+      }
     }
 
     // Add overlay text if present
@@ -85,7 +148,6 @@ export default function decorate(block) {
       videoWrapper.appendChild(overlay);
     }
 
-    videoWrapper.appendChild(video);
     block.textContent = '';
     block.appendChild(videoWrapper);
   } catch (error) {
