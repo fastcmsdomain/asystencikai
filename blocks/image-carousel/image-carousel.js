@@ -1,21 +1,58 @@
 const CAROUSEL_CONFIG = {
   ANIMATION: {
     DURATION: 300,
-    TIMING: 'var(--hover-animation-curve)',
+    TIMING: 'ease-in-out',
   },
   CLASSES: {
     ACTIVE: 'active',
-    DRAGGING: 'dragging',
   },
   TOUCH: {
     THRESHOLD: 50,
-  },
-  CARD: {
-    GAP: 'var(--spacing-s)',
-    VISIBLE: 4,
   }
 };
 
+/**
+ * Creates an SVG element for navigation arrows
+ * @param {string} direction - 'prev' or 'next'
+ * @returns {SVGElement} SVG element
+ */
+function createArrowSVG(direction) {
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  
+  svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('fill', 'none');
+  svg.setAttribute('stroke', 'currentColor');
+  svg.setAttribute('stroke-width', '2');
+  svg.setAttribute('stroke-linecap', 'round');
+  svg.setAttribute('stroke-linejoin', 'round');
+  
+  if (direction === 'prev') {
+    path.setAttribute('d', 'M15 18l-6-6 6-6');
+  } else {
+    path.setAttribute('d', 'M9 18l6-6-6-6');
+  }
+  
+  svg.appendChild(path);
+  return svg;
+}
+
+/**
+ * Calculate number of visible slides based on viewport width
+ * @returns {number} Number of visible slides
+ */
+function getVisibleSlides() {
+  const width = window.innerWidth;
+  if (width <= 600) return 1;
+  if (width <= 900) return 2;
+  if (width <= 1200) return 3;
+  return 4;
+}
+
+/**
+ * Initialize carousel functionality
+ * @param {HTMLElement} block - The carousel block element
+ */
 export default function decorate(block) {
   // Create main structure
   const mainWrapper = document.createElement('div');
@@ -46,7 +83,7 @@ export default function decorate(block) {
   slidesContainer.className = 'carousel-slides';
   
   // Process slides
-  [...block.children].forEach((slide) => {
+  const slides = [...block.children].map((slide) => {
     const cardDiv = document.createElement('div');
     cardDiv.className = 'carousel-card';
     
@@ -77,12 +114,126 @@ export default function decorate(block) {
     cardDiv.appendChild(contentDiv);
     
     slidesContainer.appendChild(cardDiv);
+    return cardDiv;
   });
   
-  // Assemble structure
+  // Create navigation arrows
+  const prevArrow = document.createElement('button');
+  const nextArrow = document.createElement('button');
+  prevArrow.className = 'carousel-arrow prev';
+  nextArrow.className = 'carousel-arrow next';
+  prevArrow.appendChild(createArrowSVG('prev'));
+  nextArrow.appendChild(createArrowSVG('next'));
+  
+  // Create indicators container
+  const indicators = document.createElement('div');
+  indicators.className = 'carousel-indicators';
+  
+  // Add all elements to the carousel
   carouselWrapper.appendChild(slidesContainer);
+  carouselWrapper.appendChild(prevArrow);
+  carouselWrapper.appendChild(nextArrow);
   mainWrapper.appendChild(header);
   mainWrapper.appendChild(carouselWrapper);
+  mainWrapper.appendChild(indicators);
+  
+  // Clear original block and append new structure
   block.textContent = '';
   block.appendChild(mainWrapper);
-} 
+  
+  // Initialize carousel state
+  let currentSlide = 0;
+  let visibleSlides = getVisibleSlides();
+  
+  // Create indicators
+  function updateIndicators() {
+    indicators.innerHTML = '';
+    const totalIndicators = Math.ceil(slides.length / visibleSlides);
+    
+    for (let i = 0; i < totalIndicators; i++) {
+      const indicator = document.createElement('button');
+      indicator.className = `carousel-indicator${i === currentSlide ? ' active' : ''}`;
+      indicator.setAttribute('aria-label', `Go to slide ${i + 1}`);
+      indicator.addEventListener('click', () => {
+        goToSlide(i);
+      });
+      indicators.appendChild(indicator);
+    }
+  }
+  
+  // Update carousel state
+  function updateCarousel() {
+    const slideWidth = slides[0].offsetWidth;
+    const gap = parseInt(getComputedStyle(slidesContainer).gap, 10);
+    const offset = -currentSlide * (slideWidth + gap);
+    
+    slidesContainer.style.transform = `translateX(${offset}px)`;
+    
+    // Update indicators
+    const indicatorButtons = indicators.querySelectorAll('.carousel-indicator');
+    indicatorButtons.forEach((button, index) => {
+      button.classList.toggle(CAROUSEL_CONFIG.CLASSES.ACTIVE, index === currentSlide);
+    });
+    
+    // Update arrow states
+    prevArrow.disabled = currentSlide === 0;
+    nextArrow.disabled = currentSlide >= slides.length - visibleSlides;
+  }
+  
+  // Slide navigation
+  function goToSlide(index) {
+    currentSlide = Math.max(0, Math.min(index, slides.length - visibleSlides));
+    updateCarousel();
+  }
+  
+  // Event listeners
+  prevArrow.addEventListener('click', () => {
+    if (currentSlide > 0) {
+      goToSlide(currentSlide - 1);
+    }
+  });
+  
+  nextArrow.addEventListener('click', () => {
+    if (currentSlide < slides.length - visibleSlides) {
+      goToSlide(currentSlide + 1);
+    }
+  });
+  
+  // Touch support
+  let touchStartX = 0;
+  let touchEndX = 0;
+  
+  slidesContainer.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+  });
+  
+  slidesContainer.addEventListener('touchmove', (e) => {
+    touchEndX = e.touches[0].clientX;
+  });
+  
+  slidesContainer.addEventListener('touchend', () => {
+    const diff = touchStartX - touchEndX;
+    if (Math.abs(diff) > CAROUSEL_CONFIG.TOUCH.THRESHOLD) {
+      if (diff > 0 && currentSlide < slides.length - visibleSlides) {
+        goToSlide(currentSlide + 1);
+      } else if (diff < 0 && currentSlide > 0) {
+        goToSlide(currentSlide - 1);
+      }
+    }
+  });
+  
+  // Window resize handler
+  window.addEventListener('resize', () => {
+    const newVisibleSlides = getVisibleSlides();
+    if (newVisibleSlides !== visibleSlides) {
+      visibleSlides = newVisibleSlides;
+      currentSlide = Math.min(currentSlide, slides.length - visibleSlides);
+      updateIndicators();
+      updateCarousel();
+    }
+  });
+  
+  // Initial setup
+  updateIndicators();
+  updateCarousel();
+}

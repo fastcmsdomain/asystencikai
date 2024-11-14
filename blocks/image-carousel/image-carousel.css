@@ -2,10 +2,12 @@
   --carousel-gap: var(--spacing-s);
   --card-radius: 8px;
   --card-padding: var(--spacing-s);
+  --arrow-size: 48px;
+  --indicator-size: 8px;
   margin: var(--spacing-xl) auto;
   max-width: var(--page-max-content);
   padding: 0 var(--spacing-s);
-  
+  position: relative;
   width: 100%;
 }
 
@@ -38,13 +40,14 @@
 
 .carousel-wrapper {
   overflow: hidden;
+  position: relative;
   width: 100%;
 }
 
 .carousel-slides {
-  display: grid;
+  display: flex;
   gap: var(--carousel-gap);
-  grid-template-columns: repeat(4, 1fr);
+  transition: transform 0.3s ease-in-out;
   width: 100%;
 }
 
@@ -52,6 +55,7 @@
   aspect-ratio: 3/4;
   background: var(--color-nocturnal-blue);
   border-radius: var(--card-radius);
+  flex: 0 0 calc((100% - (var(--carousel-gap) * 3)) / 4);
   overflow: hidden;
   position: relative;
   transition: transform var(--hover-animation);
@@ -110,15 +114,80 @@
   width: 6px;
 }
 
+/* Navigation Arrows */
+.carousel-arrow {
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  border-radius: 50%;
+  color: var(--color-white);
+  cursor: pointer;
+  display: flex;
+  height: var(--arrow-size);
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: background-color 0.3s ease, opacity 0.3s ease;
+  width: var(--arrow-size);
+  z-index: 2;
+}
+
+.carousel-arrow:not(:disabled):hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.carousel-arrow:disabled {
+  cursor: default;
+  opacity: 0.3;
+}
+
+.carousel-arrow.prev {
+  left: -24px;
+}
+
+.carousel-arrow.next {
+  right: -24px;
+}
+
+.carousel-arrow svg {
+  height: 24px;
+  width: 24px;
+}
+
+/* Slide Indicators */
+.carousel-indicators {
+  align-items: center;
+  display: flex;
+  gap: var(--spacing-xs);
+  justify-content: center;
+  margin-top: var(--spacing-m);
+}
+
+.carousel-indicator {
+  background: rgba(255, 255, 255, 0.3);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  height: var(--indicator-size);
+  padding: 0;
+  transition: background-color 0.3s ease;
+  width: var(--indicator-size);
+}
+
+.carousel-indicator.active {
+  background: var(--color-white);
+}
+
 @media (max-width: 1200px) {
-  .carousel-slides {
-    grid-template-columns: repeat(3, 1fr);
+  .carousel-card {
+    flex: 0 0 calc((100% - (var(--carousel-gap) * 2)) / 3);
   }
 }
 
 @media (max-width: 900px) {
-  .carousel-slides {
-    grid-template-columns: repeat(2, 1fr);
+  .carousel-card {
+    flex: 0 0 calc((100% - var(--carousel-gap)) / 2);
   }
   
   .carousel-title {
@@ -128,11 +197,12 @@
 }
 
 @media (max-width: 600px) {
-  .carousel-slides {
-    grid-template-columns: 1fr;
-  }
-  
   .carousel-card {
     aspect-ratio: 16/9;
+    flex: 0 0 100%;
   }
-} 
+  
+  .carousel-arrow {
+    display: none;
+  }
+}
