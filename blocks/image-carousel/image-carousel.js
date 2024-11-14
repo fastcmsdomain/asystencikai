@@ -10,6 +10,10 @@ const CAROUSEL_CONFIG = {
   TOUCH: {
     THRESHOLD: 50,
   },
+  CARD: {
+    GAP: 24, // Gap between cards
+    VISIBLE: 4, // Number of visible cards
+  }
 };
 
 export default async function decorate(block) {
@@ -164,4 +168,38 @@ export default async function decorate(block) {
   
   // Initialize position
   moveToSlide(1);
+  
+  // Add this new function to create card content
+  function createCardContent(slide) {
+    const cardDiv = document.createElement('div');
+    cardDiv.className = 'carousel-card';
+    
+    const img = slide.querySelector('img');
+    const title = slide.textContent.trim();
+    const type = slide.getAttribute('data-type') || 'WHITE PAPER';
+    
+    if (img) {
+      const imgWrapper = document.createElement('div');
+      imgWrapper.className = 'card-image';
+      imgWrapper.appendChild(img.cloneNode(true));
+      cardDiv.appendChild(imgWrapper);
+    }
+    
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'card-content';
+    
+    const titleDiv = document.createElement('h3');
+    titleDiv.className = 'card-title';
+    titleDiv.textContent = title;
+    
+    const typeDiv = document.createElement('div');
+    typeDiv.className = 'card-type';
+    typeDiv.textContent = type;
+    
+    contentDiv.appendChild(titleDiv);
+    contentDiv.appendChild(typeDiv);
+    cardDiv.appendChild(contentDiv);
+    
+    return cardDiv;
+  }
 } 
