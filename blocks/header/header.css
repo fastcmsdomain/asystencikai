@@ -20,8 +20,10 @@ header .nav-brand {
   left: 50%;
   padding: var(--spacing-xs);
   position: fixed;
+  top: 0;
   transform: translateX(-50%);
-  width: 100px;
+  transition: all 0.3s ease-out;
+  width: 200px;
   z-index: 3;
 }
 
@@ -47,7 +49,9 @@ header .nav-brand span {
 
 /* Logo image styling */
 header .nav-brand img {
+  filter: brightness(0) invert(1);
   object-fit: contain;
+  width: 100%;
 }
 
 /* Add the logo using background-image as fallback */
@@ -55,9 +59,10 @@ header .nav-brand a::before {
   background-image: url('../../images/fasCmsLogo.svg');
   background-position: center;
   background-repeat: no-repeat;
-  background-size: 50%;
+  background-size: contain;
   content: '';
   display: block;
+  filter: brightness(0) invert(1);
   height: 100%;
   width: 100%;
 }
@@ -298,4 +303,74 @@ header nav[aria-expanded='false'] .nav-hamburger {
   header nav .nav-hamburger-icon::after {
     top: 16px;
   }
+}
+
+/* Menu shift animation */
+header nav.nav-shift {
+  animation: shiftLeft 0.3s ease-in-out forwards;
+}
+
+header .nav-brand.brand-shift {
+  animation: shiftRight 0.3s ease-in-out forwards;
+}
+
+@keyframes shiftLeft {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes shiftRight {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Reset transforms when menu is open */
+header nav[aria-expanded='true'] {
+  transform: none;
+}
+
+header nav[aria-expanded='true'] .nav-brand {
+  transform: translateX(-50%) scale(0.7);
+  transform-origin: center center;
+}
+
+/* Add styles for when nav is expanded */
+header nav[aria-expanded='true'] .nav-brand {
+  transform: translateX(-50%) scale(0.7);
+}
+
+/* Optional: Add animation for smoother transition */
+@keyframes shrinkBrand {
+  from {
+    transform: translateX(-50%) scale(1);
+  }
+  to {
+    transform: translateX(-50%) scale(0.7);
+  }
+}
+
+@keyframes expandBrand {
+  from {
+    transform: translateX(-50%) scale(0.7);
+  }
+  to {
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+/* Apply animations */
+header nav[aria-expanded='true'] .nav-brand {
+  animation: shrinkBrand 0.3s ease-out forwards;
+}
+
+header nav[aria-expanded='false'] .nav-brand {
+  animation: expandBrand 0.3s ease-out forwards;
 }

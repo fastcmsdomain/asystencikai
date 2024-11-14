@@ -19,8 +19,9 @@ const HEADER_CONFIG = {
     BUTTON_CONTAINER: '.button-container',
   },
   ASSETS: {
-    LOGO: '/prompt-master/images/fasCmsLogo.svg',
+    LOGO: '../../images/fasCmsLogo.svg',
     LOGO_ALT: 'FAS CMS Logo',
+    LOGO_WIDTH: '200px',
   },
   ARIA_LABELS: {
     OPEN_NAV: 'Open navigation',

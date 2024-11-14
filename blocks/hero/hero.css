@@ -4,12 +4,12 @@
   --hero-nav-size: 48px;
   --hero-pagination-size: 40px;
   --hero-overlay-bg: rgba(0, 0, 0, 0.4);
-  
-  position: relative;
-  width: 100vw;
   height: var(--hero-height);
   margin-left: calc(50% - 50vw);
   overflow: hidden;
+  
+  position: relative;
+  width: 100vw;
 }
 
 .hero-slides {
@@ -18,13 +18,13 @@
 }
 
 .hero-slide {
+  height: 100%;
+  left: 0;
+  opacity: 0;
   position: absolute;
   top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
   transition: opacity var(--hero-animation-duration, 0.6s) var(--hero-animation-timing, cubic-bezier(0.4, 0, 0.2, 1));
+  width: 100%;
 }
 
 .hero-slide.active {
@@ -32,60 +32,84 @@
 }
 
 .hero-image {
-  width: 100%;
   height: 100%;
   object-fit: cover;
+  width: 100%;
 }
 
 .hero-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 2rem;
   background: var(--hero-overlay-bg);
+  bottom: 0;
   color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  left: 0;
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: opacity 0.4s ease-out;
+}
+
+.hero-slide.active .hero-overlay {
+  opacity: 1;
+}
+
+.hero-overlay-image {
+  height: 100%;
+  left: 0;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: -1;
+}
+
+.hero-overlay-text {
+  background: linear-gradient(transparent, var(--hero-overlay-bg));
+  padding: 2rem;
   transform: translateY(100%);
   transition: transform 0.4s ease-out;
 }
 
-.hero-slide.active .hero-overlay {
+.hero-slide.active .hero-overlay-text {
   transform: translateY(0);
 }
 
 .hero-navigation {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  transform: translateY(-50%);
   display: flex;
   justify-content: space-between;
+  left: 0;
   padding: 0 2rem;
   pointer-events: none;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .hero-nav-btn {
-  width: var(--hero-nav-size);
-  height: var(--hero-nav-size);
-  border: 2px solid var(--hero-nav-color);
   background: transparent;
+  border: 2px solid var(--hero-nav-color);
   color: var(--hero-nav-color);
   cursor: pointer;
+  height: var(--hero-nav-size);
   pointer-events: auto;
   position: relative;
   transition: all 0.3s ease;
+  width: var(--hero-nav-size);
 }
 
 .hero-nav-btn::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 12px;
-  height: 12px;
   border: solid var(--hero-nav-color);
   border-width: 2px 2px 0 0;
+  content: '';
+  height: 12px;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  width: 12px;
 }
 
 .hero-nav-btn.prev::before {
@@ -97,22 +121,22 @@
 }
 
 .hero-pagination {
-  position: absolute;
   bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
   display: flex;
   gap: 1rem;
+  left: 50%;
+  position: absolute;
+  transform: translateX(-50%);
   z-index: 2;
 }
 
 .hero-pagination-indicator {
-  width: var(--hero-pagination-size);
-  height: 2px;
   background: rgba(255, 255, 255, 0.5);
   border: none;
   cursor: pointer;
+  height: 2px;
   transition: all 0.3s ease;
+  width: var(--hero-pagination-size);
 }
 
 .hero-pagination-indicator.active {
@@ -138,4 +162,27 @@
   .hero-navigation {
     padding: 0 1rem;
   }
+}
+
+.hero-overlay picture {
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: -1;
+}
+
+.hero-overlay picture img {
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.hero-overlay-text {
+  background: linear-gradient(transparent, var(--hero-overlay-bg));
+  color: white;
+  padding: 2rem;
+  position: relative;
+  z-index: 1;
 }

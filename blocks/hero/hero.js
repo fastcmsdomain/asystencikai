@@ -70,21 +70,25 @@ export default async function decorate(block) {
     const slide = document.createElement('div');
     slide.className = 'hero-slide';
     
-    const img = row.querySelector('img');
-    if (img) {
-      img.className = 'hero-image';
-      slide.appendChild(img.cloneNode(true));
+    const overlay = document.createElement('div');
+    overlay.className = 'hero-overlay';
+    
+    // Get the picture element and text content
+    const picture = row.querySelector('picture');
+    const textContent = row.textContent.trim();
+    
+    if (picture) {
+      // Clone and append the picture element
+      overlay.appendChild(picture.cloneNode(true));
       
-      // Add overlay text if present
-      const text = row.querySelector('p');
-      if (text) {
-        const overlay = document.createElement('div');
-        overlay.className = 'hero-overlay';
-        overlay.innerHTML = text.innerHTML;
-        slide.appendChild(overlay);
-      }
+      // Add overlay text
+      const textDiv = document.createElement('div');
+      textDiv.className = 'hero-overlay-text';
+      textDiv.textContent = textContent;
+      overlay.appendChild(textDiv);
     }
     
+    slide.appendChild(overlay);
     slidesContainer.appendChild(slide);
     return slide;
   });

@@ -358,7 +358,6 @@
     clip-path: inset(-1px -100vmax);
     margin-inline: auto;
     max-width: var(--page-max-width);
-    padding: var(--spacing-xxl) var(--spacing-m);
   }
   
   @media (width >= 900px) {
