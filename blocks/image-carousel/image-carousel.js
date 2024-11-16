@@ -16,6 +16,7 @@ const CAROUSEL_CONFIG = {
   }
 };
 
+
 /**
  * Creates an SVG element for navigation arrows
  * @param {string} direction - 'prev' or 'next'
