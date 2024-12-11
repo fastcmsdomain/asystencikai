@@ -74,7 +74,7 @@ header .nav-brand img:not([src=""]) + a::before {
 
 /* Hamburger styling */
 header nav .nav-hamburger {
-  background-color: transparent
+  background-color: transparent;
   cursor: pointer;
   left: 0;
   padding: var(--spacing-md);
@@ -373,4 +373,102 @@ header nav[aria-expanded='true'] .nav-brand {
 
 header nav[aria-expanded='false'] .nav-brand {
   animation: expandBrand 0.3s ease-out forwards;
+}
+
+/* Desktop menu styling (>=900px) */
+@media (width >= 900px) {
+  /* Header background */
+  header .nav-wrapper {
+    background-color: var(--color-nocturnal-blue);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Reposition logo to left */
+  header .nav-brand {
+    left: var(--spacing-l);
+    padding: var(--spacing-xs) 0;
+    transform: none;
+    width: 150px; /* Adjust width as needed */
+  }
+
+  /* Adjust navigation position to account for left-aligned logo */
+  header nav .nav-sections {
+    margin-left: 200px; /* Adjust based on logo width */
+  }
+
+  /* Keep other desktop menu styles */
+  header nav .nav-hamburger {
+    display: none;
+  }
+
+  header nav .nav-sections {
+    background-color: transparent; /* Remove background since header has it */
+    box-shadow: none; /* Remove shadow since header has it */
+    display: flex;
+    height: var(--nav-height);
+    justify-content: center;
+    left: 50%;
+    padding: 0;
+    position: fixed;
+    top: 0;
+    transform: translateX(-50%);
+    width: 80%;
+  }
+
+  /* Reset expanded state positioning */
+  header nav[aria-expanded='true'] .nav-brand {
+    animation: none;
+    transform: none;
+  }
+
+  /* Horizontal menu layout */
+  header nav .nav-sections ul {
+    align-items: center;
+    display: flex;
+    gap: var(--spacing-l);
+    height: 100%;
+  }
+
+  header nav .nav-sections ul > li {
+    margin: 0;
+    position: relative;
+  }
+
+  /* Adjust link styling for horizontal menu */
+  header nav .nav-sections ul > li > a {
+    font-size: var(--body-font-size-m);
+    padding: var(--spacing-xs) var(--spacing-s);
+  }
+
+  /* Dropdown styling */
+  header nav .nav-sections .nav-drop > ul {
+    background-color: var(--color-nocturnal-blue);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    display: none;
+    left: 50%;
+    margin-top: 0;
+    min-width: 200px;
+    padding: var(--spacing-s);
+    position: absolute;
+    top: 100%;
+    transform: translateX(-50%);
+  }
+
+  /* Show dropdown on hover */
+  header nav .nav-sections .nav-drop:hover > ul {
+    display: block;
+  }
+
+  /* Reset expanded menu styles */
+  header nav[aria-expanded='true'] {
+    animation: none;
+    background-color: transparent;
+    height: auto;
+    position: static;
+    width: auto;
+  }
+
+  header nav[aria-expanded='true'] .nav-sections {
+    display: flex;
+  }
 }

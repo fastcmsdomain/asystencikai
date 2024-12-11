@@ -1,0 +1,21 @@
+/* Globe block styles */
+.globe {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 300px; /* Set the width of the globe */
+    height: 300px; /* Set the height of the globe */
+    overflow: hidden; /* Hide overflow */
+    border-radius: 50%; /* Make it circular */
+    animation: rotate 10s linear infinite; /* Animation for rotation */
+}
+
+/* Keyframes for rotation */
+@keyframes rotate {
+    from {
+        transform: rotateY(0deg); /* Start position */
+    }
+    to {
+        transform: rotateY(360deg); /* End position */
+    }
+} 

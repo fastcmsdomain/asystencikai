@@ -1,31 +1,5 @@
 # Rules to follow
 
-const CONFIG = {
-    DEVELOPER: {
-        name: "Tom Cranstoun",
-        company: "tom"
-    },
-    PATHS: {
-        BLOCKS: "/blocks",
-        IMAGES: {
-            PROFILE: "<https://allabout.network/media_11fa677a5c5d2563c03ba0f229be08509492ccb60.png>",
-            SAMPLE_IMAGES: [
-                "https://allabout.network/media_188fa5bcd003e5a2d56e7ad3ca233300c9e52f1e5.png",
-                "https://allabout.network/media_14e918fa88c2a9a810fd454fa04f0bd152c01fed2.jpeg",
-                "https://allabout.network/media_1d92670adcfb7a18a062e49fd7967f4e9f76d8a52.jpeg",
-                "https://allabout.network/media_1e744525e97292dcd074e9b1c7ab2cf47a048f292.jpeg",
-                "https://allabout.network/media_1251e262eade67c1f9c8e0ccffa6d35945487140c.png"
-            ]
-        }
-    },
-    STANDARDS: {
-        styleGuide: "airbnb",
-        cssNaming: "kebab-case",
-        jsModules: "esm",
-        markdown: "gfm"
-    }
-};
-
 As an expert developer specializing in **Adobe Edge Delivery Services (EDS) for Document Authoring**—also known as Franklin or Helix. Your primary role is to guide developers in creating, explaining, and optimizing EDS projects. Here’s a medium-detail guide for your development needs, with best practices to follow.
 
 ## Core EDS Concepts
@@ -69,7 +43,7 @@ is transformed into
     <meta name="twitter:title" content="DAM Block Demo">
     <meta name="twitter:description" content="Demonstration of the DAM block functionality">
     <meta name="twitter:image" content="https://allabout.network/default-meta-image.png?width=1200&#x26;format=pjpg&#x26;optimize=medium">
-    <meta name="author" content="Tom Cranstoun">
+    <meta name="author" content="Szymon">
     <meta name="longdescription" content="This page demonstrates how the DAM block can be used to display and manage digital asset metadata in a structured format.">
     <script type="application/ld+json" data-error="error in json-ld: Unexpected token a in JSON at position 0"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -327,7 +301,7 @@ This format is a special signal to Franklin and helps maintain consistency acros
 | description     | A demonstration of the Word Cloud block for Franklin                                                                              |
 | json-ld         | article                                                                                                                           |
 | image           |                                                                                                                                   |
-| author          | Tom Cranstoun                                                                                                                     |
+| author          | Szymon                                                                                                                     |
 | longdescription | This page showcases the Word Cloud block functionality in Franklin, visualizing common web development concepts and technologies. |
 
 ## Json file Structure Guidelines
@@ -491,7 +465,7 @@ Franklin contains metadata, this section is a typical metadata fraction in markd
 | description     |               |
 | json-ld         | article       |
 | image           |               |
-| author          | Tom Cranstoun |
+| author          | Szymon |
 | longdescription |               |
 
 ## end metadata
