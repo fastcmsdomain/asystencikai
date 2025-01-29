@@ -1,3 +1,4 @@
+import { loadLanguages } from './lang-redirect.js';
 import {
   buildBlock,
   loadHeader,
@@ -121,6 +122,7 @@ function loadDelayed() {
 }
 
 async function loadPage() {
+  await loadLanguages();
   await loadEager(document);
   await loadLazy(document);
   loadDelayed();
