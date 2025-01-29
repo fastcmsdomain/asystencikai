@@ -1,0 +1,40 @@
+.language-switcher {
+  --button-bg: #f0f0f0;
+  --button-hover: #e0e0e0;
+  --button-active: #007bff;
+  --text-color: #333;
+  --border-radius: 4px;
+  --padding: 8px 16px;
+}
+
+.lang-switcher {
+  display: flex;
+  gap: 8px;
+  padding: 1rem;
+}
+
+.lang-switcher button {
+  background: var(--button-bg);
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
+  padding: var(--padding);
+  cursor: pointer;
+  color: var(--text-color);
+  transition: all 0.2s;
+}
+
+.lang-switcher button:hover {
+  background: var(--button-hover);
+}
+
+.lang-switcher button[data-active="true"] {
+  background: var(--button-active);
+  color: white;
+  border-color: var(--button-active);
+}
+
+@media (max-width: 600px) {
+  .lang-switcher {
+    flex-wrap: wrap;
+  }
+}

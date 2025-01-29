@@ -1,2 +1,24 @@
-mountpoints:
-  /: https://drive.google.com/drive/folders/16G948EEeuh1cN8spaPT5nqCrdUENuuQ_
+# Existing content
+version: 2
+
+content:
+  - url: /docs/(lang)/(*)/(*)
+    path: /$2/$3
+    headers:
+      Content-Language: $1
+      Vary: Accept-Language
+
+  - url: /libs/granite/csrf/token.json
+    path: /libs/granite/csrf/token.json
+
+static:
+  - redirect: /index.html
+    path: /en/index.md
+
+markup:
+  - type: html
+    url: '**.html'
+
+metadata:
+  - url: '/docs/(*)/(*)'
+    path: /$1/$2
