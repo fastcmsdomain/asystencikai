@@ -7,13 +7,13 @@ const LANGUAGE_CONFIG = {
 export default async function decorate(block) {
   const resp = await fetch(LANGUAGE_CONFIG.CSV_PATH);
   if (!resp.ok) return;
-  
+
   const langMap = {};
   const text = await resp.text();
   const rows = text.split('\n').slice(1);
-  
-  rows.forEach(row => {
-    const [path, en, es, fr] = row.split(',');
+
+  rows.forEach((row) => {
+    const [path, en, es, fr] = row.split(', ');
     langMap[path] = { en, es, fr };
   });
 
@@ -27,9 +27,9 @@ export default async function decorate(block) {
     <button data-lang="fr">Français</button>
   `;
 
-  langLinks.querySelectorAll('button').forEach(btn => {
+  langLinks.querySelectorAll('button').forEach((btn) => {
     btn.addEventListener('click', () => {
-      document.cookie = `${LANGUAGE_CONFIG.COOKIE_NAME}=${btn.dataset.lang};path=/;max-age=31536000`;
+      document.cookie = `${LANGUAGE_CONFIG.COOKIE_NAME}=${btn.dataset.lang}; path=/; max-age=31536000`;
       window.location.href = langMap[currentPath]?.[btn.dataset.lang] || '/';
     });
   });
