@@ -17,22 +17,22 @@ function getBrowserLang() {
 
 function shouldRedirect() {
   // Don't redirect if already on a language path
-  if (SUPPORTED_LANGS.some(lang => window.location.pathname.startsWith(`/${lang}/`))) {
+  if (SUPPORTED_LANGS.some((lang) => window.location.pathname.startsWith(`/${lang}/`))) {
     return false;
   }
-  
+
   // Check for existing cookie
   const storedLang = getCookie(LANG_COOKIE);
   if (storedLang && SUPPORTED_LANGS.includes(storedLang)) {
     return storedLang;
   }
-  
+
   // Detect browser language
   const browserLang = getBrowserLang();
   if (SUPPORTED_LANGS.includes(browserLang)) {
     return browserLang;
   }
-  
+
   return DEFAULT_LANG;
 }
 
