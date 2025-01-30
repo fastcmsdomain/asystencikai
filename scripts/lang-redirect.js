@@ -12,7 +12,7 @@ function getCookie(name) {
 }
 
 function getBrowserLang() {
-  return (navigator.language || navigator.userLanguage).substring(0,2);
+  return (navigator.language || navigator.userLanguage).substring(0, 2);
 }
 
 function shouldRedirect() {
